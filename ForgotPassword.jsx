@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { supabase } from '../supabaseClient'; // Adjust path if needed
+import { supabase } from "./src/supabaseClient"; // Adjust path if needed
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -12,9 +12,9 @@ export default function ForgotPassword() {
     setMessage('');
 
     // Requests Supabase to send a reset email to the user
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://gym-app-athelete.vercel.app/update-password', // or http://localhost:5173/update-password when testing locally
-    });
+   const { error } = await supabase.auth.resetPasswordForEmail(email, {
+  redirectTo: 'https://gym-app-athelete.vercel.app', // Points directly to main site
+});
 
     if (error) {
       setMessage(`Error: ${error.message}`);
