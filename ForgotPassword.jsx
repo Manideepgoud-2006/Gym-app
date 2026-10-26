@@ -1,31 +1,30 @@
-import { useState } from 'react';
-import { supabase } from "./src/supabaseClient"; // Adjust path if needed
+import React, { useState } from 'react'
+import { supabase } from './supabaseClient'
 
-export default function ForgotPassword() {
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [loading, setLoading] = useState(false);
+export default function ForgotPassword({ onBackToLogin }) {
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const handleResetPassword = async (e) => {
-  e.preventDefault()
-  setLoading(true)
-  
-  const { error } = await supabase.auth.resetPasswordForEmail(email) {
-    redirectTo: `${window.location.origin}`, // <--- Uses exact current site origin dynamically
-  })
+    e.preventDefault()
+    setLoading(true)
 
-  if (error) {
-    alert(error.message)
-  } else {
-    alert('Password reset link sent! Check your inbox.')
+    // Clean call using your Supabase Dashboard's configured Site URL
+    const { error } = await supabase.auth.resetPasswordForEmail(email)
+
+    if (error) {
+      alert(error.message)
+    } else {
+      alert('Password reset link sent! Check your inbox.')
+    }
+    setLoading(false)
   }
-  setLoading(false)
-}
 
   return (
     <div style={{ maxWidth: '400px', margin: '40px auto', padding: '20px' }}>
       <h2>Forgot Password</h2>
-      <form onSubmit={handleReset}>
+      <form onSubmit={handleResetPassword}>
         <input
           type="email"
           placeholder="Enter your registered email"
@@ -38,7 +37,6 @@ export default function ForgotPassword() {
           {loading ? 'Sending...' : 'Send Reset Link'}
         </button>
       </form>
-      {message && <p style={{ marginTop: '15px' }}>{message}</p>}
     </div>
-  );
+  )
 }
