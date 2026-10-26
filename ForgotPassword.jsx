@@ -6,23 +6,21 @@ export default function ForgotPassword() {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleReset = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage('');
+  const handleResetPassword = async (e) => {
+  e.preventDefault()
+  setLoading(true)
+  
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}`, // <--- Uses exact current site origin dynamically
+  })
 
-    // Requests Supabase to send a reset email to the user
-   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-  redirectTo: 'https://gym-app-athelete.vercel.app', // Points directly to main site
-});
-
-    if (error) {
-      setMessage(`Error: ${error.message}`);
-    } else {
-      setMessage('Check your email for the password reset link!');
-    }
-    setLoading(false);
-  };
+  if (error) {
+    alert(error.message)
+  } else {
+    alert('Password reset link sent! Check your inbox.')
+  }
+  setLoading(false)
+}
 
   return (
     <div style={{ maxWidth: '400px', margin: '40px auto', padding: '20px' }}>
